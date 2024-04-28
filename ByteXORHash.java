@@ -1,16 +1,19 @@
 import java.io.*;
-
 public class ByteXORHash {
     public static void main(String[] args) {
         try {
-            // Read input bytes from standard input stream
-            InputStream inputStream = System.in;
-            int nextByte;
-            byte result = 0;
+            // Read input string from standard input stream
+            BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+            System.out.print("Enter the input string: ");
+            String input = reader.readLine();
+
+            // Convert input string to bytes
+            byte[] bytes = input.getBytes();
 
             // Perform XOR operation on all bytes
-            while ((nextByte = inputStream.read()) != -1) {
-                result ^= (byte) nextByte; // XOR operation
+            byte result = 0;
+            for (byte b : bytes) {
+                result ^= b; // XOR operation
             }
 
             // Print the one-byte hash result
