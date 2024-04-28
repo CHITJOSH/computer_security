@@ -1,0 +1,39 @@
+from collections import Counter
+
+# English letter frequencies
+english_frequencies = {
+    'A': 0.08167, 'B': 0.01492, 'C': 0.02782, 'D': 0.04253, 'E': 0.12702,
+    'F': 0.02228, 'G': 0.02015, 'H': 0.06094, 'I': 0.06966, 'J': 0.00153,
+    'K': 0.00772, 'L': 0.04025, 'M': 0.02406, 'N': 0.06749, 'O': 0.07507,
+    'P': 0.01929, 'Q': 0.00095, 'R': 0.05987, 'S': 0.06327, 'T': 0.09056,
+    'U': 0.02758, 'V': 0.00978, 'W': 0.02360, 'X': 0.00150, 'Y': 0.01974,
+    'Z': 0.00074
+}
+
+def frequency_distribution(text):
+    # Count the frequency of each letter in the text
+    freq = Counter(text.upper())
+    total = sum(freq.values())
+    # Normalize the frequencies
+    freq_normalized = {char: count / total for char, count in freq.items()}
+    return freq_normalized
+
+def correlation_coefficient(ciphertext, english_freq, shift):
+    freq = frequency_distribution(ciphertext)
+    phi_i = sum(freq.get(char, 0) * english_freq.get(chr(((ord(char) - 65) - shift) % 26 + 65), 0) for char in freq.keys())
+    return phi_i
+
+def correlation_table(ciphertext, english_freq):
+    table = {}
+    for i in range(26):  # Try all possible shifts
+        table[i] = correlation_coefficient(ciphertext, english_freq, i)
+    return table
+
+# Example ciphertext
+cipher = "TEBKFKQEBZLROPBLCERJXKBSBKQP"
+correlation_tab = correlation_table(cipher, english_frequencies)
+
+# Print correlation table
+print("Shift\tCorrelation Phi(i)")
+for shift, phi in correlation_tab.items():
+    print(f"{shift}\t{phi}")
